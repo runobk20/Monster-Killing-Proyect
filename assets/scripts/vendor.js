@@ -39,6 +39,15 @@ function removeBonusLife() {
   bonusLifeEl.parentNode.removeChild(bonusLifeEl);
 }
 
+// Added by me
+function restoreBonusLife() {
+  const playerHealthContainer = document.getElementById('playerHealthContainer');
+  const bonusLifeNewEl = document.createElement('span');
+  bonusLifeNewEl.textContent = 1;
+  bonusLifeNewEl.id = 'bonus-life';
+  playerHealthContainer.append(bonusLifeNewEl);
+}
+
 function setPlayerHealth(health) {
   playerHealthBar.value = health;
 }
