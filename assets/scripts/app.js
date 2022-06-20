@@ -24,53 +24,63 @@ let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
 let hasBonusLife = true;
 let battleLog = [];
+let lastLogEntry;
 
 adjustHealthBars(chosenMaxLife);
 
 // Writing log of the battle
 function writeToLog(event, value, monsterHealth, playerHealth) {
     let logEntry;
-    if (event === LOG_EVENT_PLAYER_ATTACK){
-        logEntry = {
-            event: event,
-            value: value,
-            target: 'MONSTER',
-            finalMonsterHealth: monsterHealth,
-            finalPlayerHealth: playerHealth
-        };
-    } else if (event === LOG_EVENT_PLAYER_STRONG_ATTACK) {
-        logEntry = {
-            event: event,
-            value: value,
-            target: 'MONSTER',
-            finalMonsterHealth: monsterHealth,
-            finalPlayerHealth: playerHealth
-        };
-    } else if (event === LOG_EVENT_MONSTER_ATTACK) {
-        logEntry = {
-            event: event,
-            value: value,
-            target: 'PLAYER',
-            finalMonsterHealth: monsterHealth,
-            finalPlayerHealth: playerHealth
-        };
-    } else if (event === LOG_EVENT_PLAYER_HEAL) {
-        logEntry = {
-            event: event,
-            value: value,
-            target: 'PLAYER',
-            finalMonsterHealth: monsterHealth,
-            finalPlayerHealth: playerHealth
-        };
-    } else if (event === LOG_EVENT_GAME_OVER) {
-        logEntry = {
-            event: event,
-            value: value,
-            finalMonsterHealth: monsterHealth,
-            finalPlayerHealth: playerHealth
-        };
+
+    switch (event) {
+        case LOG_EVENT_PLAYER_ATTACK:
+            logEntry = {
+                event: event,
+                value: value,
+                target: 'MONSTER',
+                finalMonsterHealth: monsterHealth,
+                finalPlayerHealth: playerHealth
+            };
+            break;
+        case LOG_EVENT_PLAYER_STRONG_ATTACK:
+            logEntry = {
+                event: event,
+                value: value,
+                target: 'MONSTER',
+                finalMonsterHealth: monsterHealth,
+                finalPlayerHealth: playerHealth
+            };
+            break;
+        case LOG_EVENT_MONSTER_ATTACK:
+            logEntry = {
+                event: event,
+                value: value,
+                target: 'PLAYER',
+                finalMonsterHealth: monsterHealth,
+                finalPlayerHealth: playerHealth
+            };
+            break;
+        case LOG_EVENT_PLAYER_HEAL:
+            logEntry = {
+                event: event,
+                value: value,
+                target: 'PLAYER',
+                finalMonsterHealth: monsterHealth,
+                finalPlayerHealth: playerHealth
+            };
+            break;
+        case LOG_EVENT_GAME_OVER:
+            logEntry = {
+                event: event,
+                value: value,
+                finalMonsterHealth: monsterHealth,
+                finalPlayerHealth: playerHealth
+            };
+            break;
+        default:
+            logEntry = {};
     }
-    battleLog.push(logEntry);
+        battleLog.push(logEntry);
 }
 
 function resetHealth() {
@@ -172,7 +182,26 @@ function healPlayerHandler() {
 }
 
 function printLogHandler() {
-    console.log(battleLog);
+    // Print the battle logs with a for loop
+/*      for (let i = 0; i < battleLog.length; i++) {
+        console.log(battleLog[i]);
+    }   */
+    // Print the battle logs with for of loop, if the value of the variable isn't going to change in the loop, we can use const to store it, in other cases we use let.
+    // Adding break and making it show one entry at once 
+    let i = 0;
+    for (const entry of battleLog) {
+        if (!lastLogEntry && lastLogEntry !== 0 || lastLogEntry < i) {
+            console.log(`#${i}`);
+            for (const key in entry) {
+                console.log(`${key} => ${entry[key]}`);
+            }
+            lastLogEntry = i;
+            break;
+        }
+        // Iterating in the keys and values of the entry object, we select each key of entry with 'key' and access its value with entry[key]
+        i++;
+    }
+
 }
 
 // Event listeners.
